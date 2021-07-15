@@ -14,4 +14,8 @@ class PlayerNotifier extends StateNotifier<PlayerType> {
   void updatePlayer() {
     state = state == PlayerType.MICE ? PlayerType.CAT : PlayerType.MICE;
   }
+
+  PlayerType getPlayer() {
+    return state;
+  }
 }

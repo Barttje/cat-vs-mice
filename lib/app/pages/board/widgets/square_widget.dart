@@ -1,7 +1,7 @@
 import 'package:cat_vs_mice/app/pages/board/board_view_model.dart';
-import 'package:cat_vs_mice/app/pages/board/checker_widget.dart';
 import 'package:cat_vs_mice/app/pages/board/model/checker.dart';
 import 'package:cat_vs_mice/app/pages/board/model/square.dart';
+import 'package:cat_vs_mice/app/pages/board/widgets/checker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,6 +29,7 @@ class SquareWidget extends HookWidget {
     List<Checker> checking = useProvider(checkers);
     Checker? checkerOnSquare = checking
         .firstWhereOrNull((element) => element.coordinate == square.coordinate);
+    BoardViewModel model = context.read(boardGameViewModel);
     return DragTarget(
       builder: (BuildContext context, List<dynamic> candidateData,
           List<dynamic> rejectedData) {
@@ -38,16 +39,19 @@ class SquareWidget extends HookWidget {
                 : Container(),
             color: getColor(willAccept.value));
       },
-      onWillAccept: (data) {
-        willAccept.value = true;
-        return true;
+      onWillAccept: (Checker? data) {
+        if (data == null) {
+          return false;
+        }
+        willAccept.value = model.canMoveTo(data, square.coordinate);
+        return willAccept.value;
       },
       onLeave: (data) {
         willAccept.value = false;
       },
       onAccept: (Checker data) {
         willAccept.value = false;
-        context.read(boardGameViewModel).finishDrag(data, square.coordinate);
+        model.finishDrag(data, square.coordinate);
       },
     );
   }

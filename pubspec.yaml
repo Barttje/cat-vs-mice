@@ -14,6 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   quiver: ^3.0.1
   get: ^4.1.4
+  toggle_switch: ^1.2.0
 
 dev_dependencies:
   flutter_test:

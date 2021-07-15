@@ -51,4 +51,8 @@ class CheckerNotifier extends StateNotifier<List<Checker>> {
           checker
     ];
   }
+
+  List<Checker> getCheckers() {
+    return state.toList();
+  }
 }

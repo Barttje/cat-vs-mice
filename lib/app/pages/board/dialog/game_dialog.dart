@@ -27,15 +27,15 @@ class CheckerWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final current = useProvider(currentPlayer);
-
+    final viewModel = context.read(boardGameViewModel);
     return Draggable(
       data: checker,
       maxSimultaneousDrags: allowMove(current),
       onDragStarted: () {
-        context.read(boardGameViewModel).startDrag(checker);
+        viewModel.startDrag(checker);
       },
       onDraggableCanceled: (a, b) {
-        context.read(boardGameViewModel).cancelDrag(checker);
+        viewModel.cancelDrag(checker);
       },
       feedback: Container(
         child: Icon(
