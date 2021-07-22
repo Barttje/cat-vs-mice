@@ -2,7 +2,7 @@ import 'package:cat_vs_mice/app/pages/board/board_page_input.dart';
 import 'package:cat_vs_mice/app/pages/board/board_view_model.dart';
 import 'package:cat_vs_mice/app/pages/board/model/coordinate.dart';
 import 'package:cat_vs_mice/app/pages/board/model/square.dart';
-import 'package:cat_vs_mice/app/pages/board/widgets/current_player_widget.dart';
+import 'package:cat_vs_mice/app/pages/board/widgets/options_widget.dart';
 import 'package:cat_vs_mice/app/pages/board/widgets/square_widget.dart';
 import 'package:cat_vs_mice/app/pages/common/page.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class BoardPage extends HookWidget {
             crossAxisCount: 8,
             children: squares.map((square) => SquareWidget(square)).toList(),
           ),
-          CurrentPlayerWidget()
+          OptionsWidget()
         ],
       ),
     );

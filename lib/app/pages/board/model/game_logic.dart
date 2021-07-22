@@ -21,16 +21,16 @@ class GameLogic {
   static List<Coordinate> possibleMoves(
       Checker checker, List<Checker> checkers) {
     final List<Coordinate> coordinates = [];
-    coordinates
-        .add(Coordinate(checker.coordinate.x + 1, checker.coordinate.y + 1));
-    coordinates
-        .add(Coordinate(checker.coordinate.x - 1, checker.coordinate.y + 1));
     if (checker.type == PlayerType.CAT) {
       coordinates
           .add(Coordinate(checker.coordinate.x + 1, checker.coordinate.y - 1));
       coordinates
           .add(Coordinate(checker.coordinate.x - 1, checker.coordinate.y - 1));
     }
+    coordinates
+        .add(Coordinate(checker.coordinate.x + 1, checker.coordinate.y + 1));
+    coordinates
+        .add(Coordinate(checker.coordinate.x - 1, checker.coordinate.y + 1));
     return coordinates
         .where((Coordinate element) => element.x >= 0 && element.x <= 8)
         .where((Coordinate element) => element.y >= 0 && element.y <= 8)

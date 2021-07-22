@@ -8,29 +8,23 @@ class CurrentPlayerWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final player = useProvider(currentPlayer);
-    return Row(
-      children: [
-        Expanded(flex: 1, child: Container()),
-        Container(
-          color: Colors.brown[100]!,
-          padding: EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Current Player",
-                style: TextStyle(fontSize: 16),
-              ),
-              Icon(
-                Icons.circle,
-                color: player == PlayerType.MICE ? Colors.black : Colors.white,
-                size: 35,
-              ),
-            ],
+    return Container(
+      color: Colors.brown[100]!,
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Current Player",
+            style: TextStyle(fontSize: 16),
           ),
-        ),
-        Expanded(flex: 1, child: Container()),
-      ],
+          Icon(
+            Icons.circle,
+            color: player == PlayerType.MICE ? Colors.black : Colors.white,
+            size: 35,
+          ),
+        ],
+      ),
     );
   }
 }

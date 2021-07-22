@@ -45,7 +45,7 @@ class BoardViewModel {
   void finishDrag(Checker selectedChecker, Coordinate coordinate) {
     if (coordinate != selectedChecker.coordinate) {
       playerNotifier.updatePlayer();
-      checkersStateNotifier.finishDrag(selectedChecker, coordinate);
+      checkersStateNotifier.move(selectedChecker, coordinate);
       if (GameLogic.playerWon(_read(checkers)) != null) {
         Get.defaultDialog(
           title: "Won",

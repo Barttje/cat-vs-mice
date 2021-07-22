@@ -14,6 +14,11 @@ class CheckerNotifier extends StateNotifier<List<Checker>> {
       Checker(3, PlayerType.MICE, new Coordinate(4, 0)),
       Checker(4, PlayerType.MICE, new Coordinate(6, 0)),
       Checker(5, PlayerType.CAT, new Coordinate(3, 7))
+//      Checker(1, PlayerType.MICE, new Coordinate(1, 1)),
+//      Checker(2, PlayerType.MICE, new Coordinate(3, 1)),
+//      Checker(3, PlayerType.MICE, new Coordinate(5, 1)),
+//      Checker(4, PlayerType.MICE, new Coordinate(6, 2)),
+//      Checker(5, PlayerType.CAT, new Coordinate(3, 3))
     ];
   }
 
@@ -37,7 +42,7 @@ class CheckerNotifier extends StateNotifier<List<Checker>> {
     ];
   }
 
-  void finishDrag(Checker selectedChecker, Coordinate coordinate) {
+  void move(Checker selectedChecker, Coordinate coordinate) {
     Checker? checkerOnDestination =
         state.firstWhereOrNull((checker) => checker.coordinate == coordinate);
     Coordinate origin = selectedChecker.coordinate;

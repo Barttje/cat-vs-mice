@@ -8,7 +8,7 @@ class PlayerNotifier extends StateNotifier<PlayerType> {
   PlayerNotifier(PlayerType state) : super(state);
 
   void initialize() {
-    state = PlayerType.MICE;
+    state = PlayerType.CAT;
   }
 
   void updatePlayer() {
