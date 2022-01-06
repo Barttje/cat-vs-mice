@@ -2,7 +2,6 @@ import 'package:cat_vs_mice/app/pages/menu/game/game_menu_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class GameMenuErrorWidget extends HookWidget {
   @override

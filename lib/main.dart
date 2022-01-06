@@ -10,19 +10,19 @@ class DragAndDropExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
-//        accentColor: Colors.cyan[600],
-//        elevatedButtonTheme: ElevatedButtonThemeData(
-//          style: ButtonStyle(
-//            backgroundColor: MaterialStateProperty.all<Color>(
-//              Colors.green,
-//            ), //button color
-//            foregroundColor: MaterialStateProperty.all<Color>(
-//              Colors.black,
-//            ), //text (and icon)
-//          ),
-//        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+              Colors.green,
+            ), //button color
+            foregroundColor: MaterialStateProperty.all<Color>(
+              Colors.black,
+            ), //text (and icon)
+          ),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainMenuPage(),

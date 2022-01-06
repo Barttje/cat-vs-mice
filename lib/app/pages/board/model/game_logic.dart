@@ -32,10 +32,17 @@ class GameLogic {
     coordinates
         .add(Coordinate(checker.coordinate.x - 1, checker.coordinate.y + 1));
     return coordinates
-        .where((Coordinate element) => element.x >= 0 && element.x <= 8)
-        .where((Coordinate element) => element.y >= 0 && element.y <= 8)
+        .where((Coordinate element) => element.x >= 0 && element.x < 8)
+        .where((Coordinate element) => element.y >= 0 && element.y < 8)
         .where((Coordinate element) =>
             !checkers.any((Checker check) => element == check.coordinate))
         .toList();
   }
+
+  static int distance(Checker from, Checker to) =>
+      (from.coordinate.x - to.coordinate.x).abs() + (from.coordinate.y - to.coordinate.y).abs();
+
+  static int distanceC(Coordinate from, Checker to) =>
+      (from.x - to.coordinate.x).abs() + (from.y - to.coordinate.y).abs();
+
 }

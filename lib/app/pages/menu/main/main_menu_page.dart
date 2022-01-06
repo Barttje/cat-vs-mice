@@ -1,12 +1,8 @@
-import 'package:cat_vs_mice/app/pages/board/board_page.dart';
-import 'package:cat_vs_mice/app/pages/board/board_view_model.dart';
 import 'package:cat_vs_mice/app/pages/common/page.dart';
 import 'package:cat_vs_mice/app/pages/menu/main/main_menu_view_model.dart';
 import 'package:cat_vs_mice/app/pages/menu/main/model/menu_options.dart';
-import 'package:cat_vs_mice/app/routing/routing_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:get/route_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MainMenuPage extends StatelessWidget {

@@ -1,129 +1,102 @@
-import 'dart:math';
 
 import 'package:cat_vs_mice/app/pages/board/model/ai_settings.dart';
 import 'package:cat_vs_mice/app/pages/board/model/checker.dart';
-import 'package:cat_vs_mice/app/pages/board/model/coordinate.dart';
 import 'package:cat_vs_mice/app/pages/board/model/game_logic.dart';
 import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/board/service/move.dart';
-import 'package:cat_vs_mice/app/pages/board/service/node.dart';
 import 'package:cat_vs_mice/app/pages/board/service/result.dart';
+import 'package:collection/src/iterable_extensions.dart';
 
 class AIService {
-  final AISettings? settings;
+  final AISettings settings;
 
   AIService(this.settings);
 
-  Coordinate nextMove(List<Checker> state) {
-    GameLogic.playerWon(state);
-    return Coordinate(0, 1);
+  Result computeMoveForEasyCat(final List<Checker> checkers) {
+    final catChecker = checkers.firstWhere((element) => element.type == PlayerType.CAT);
+    final possibleMoves = GameLogic.possibleMoves(catChecker, checkers);
+    possibleMoves.shuffle();
+    final movesForward = possibleMoves.where((element) => element.y < catChecker.coordinate.y).toList();
+    if (movesForward.isNotEmpty) {
+      return Result(Move(catChecker, movesForward.first), 0);
+    }
+    return Result(Move(catChecker, possibleMoves.first), 0);
   }
 
-  Result minimax(Node node, int depth, bool maximizingPlayer) {
-    final winner = GameLogic.playerWon(node.checkers);
-    if (depth == 0 || winner != null) {
-      return computeScore(winner);
+  Result computeMoveForEasyMice(final List<Checker> checkers) {
+    final mices = checkers.where((element) => element.type == PlayerType.MICE).toList();
+    final cat = checkers.firstWhere((element) => element.type == PlayerType.CAT);
+    // try to do safe move ( close rank without creating new gap)
+    mices.forEach((element) {
+      print('x ${element.coordinate.x}, y ${element.coordinate.y}');
+    });
+
+    var result = canMoveWithoutGapLeftSide(checkers, mices);
+    if (result != null) {
+      return result;
     }
-    if (maximizingPlayer) {
-      int value = -1000;
-      Iterable<Move> moves = computeCatMoves(node);
-      Move? bestmove;
-      for (var move in moves) {
-        var result =
-            minimax(node.copy(move), depth - 1, !maximizingPlayer).value;
-        if (result > value) {
-          value = result;
-          bestmove = move;
-        }
-      }
-      return Result(bestmove, value);
-    } else {
-      int value = 1000;
-      List<Move> moves = computeMiceMoves(node);
-      Move? bestmove;
-      for (var move in moves) {
-        var result =
-            minimax(node.copy(move), depth - 1, !maximizingPlayer).value;
-        if (result < value) {
-          value = result;
-          bestmove = move;
-        }
-      }
-      return Result(bestmove, value);
+    result = canMoveWithoutGapRightSide(checkers, mices);
+    if (result != null) {
+      return result;
     }
+    // try to do safe move ( close rank without creating new gap)
+    final mice = mices.firstWhereOrNull((element) => canCloseRank(element, mices));
+    if (mice != null && GameLogic.possibleMoves(mice, checkers).isNotEmpty) {
+      return Result(Move(mice, GameLogic.possibleMoves(mice, checkers).first), 0);
+    }
+    // close another gap
+
+    // move cat most far away
+    mices.sort((element, element2) => distance(element, cat) - distance(element2, cat));
+    var first = mices.first;
+    var last = mices.last;
+    print('x ${first.coordinate.x}, y ${first.coordinate.y}');
+    print('x ${last.coordinate.x}, y ${last.coordinate.y}');
+
+    final miceChecker = last;
+    final possibleMoves = GameLogic.possibleMoves(miceChecker, checkers);
+    possibleMoves.shuffle();
+    return Result(Move(miceChecker, possibleMoves.first), 0);
   }
 
-  List<Move> computeMiceMoves(Node node) {
-    final mices =
-        node.checkers.where((element) => element.type == PlayerType.MICE);
-    final List<Move> moves = [];
-    for (var mice in mices) {
-      moves.addAll(GameLogic.possibleMoves(mice, node.checkers)
-          .map((e) => Move(mice, e)));
+  int distance(Checker from, Checker to) =>
+      (from.coordinate.x - to.coordinate.x).abs() + (from.coordinate.y - to.coordinate.y).abs();
+
+  bool canCloseRank(Checker checker, List<Checker> mices) {
+    print(checker.coordinate.y);
+    if (checker.coordinate.y % 2 == 0) {
+      return mices.any((element) =>
+          (element.coordinate.y - 1) == checker.coordinate.y && (element.coordinate.x + 1) == checker.coordinate.x);
     }
-    return moves;
+    return mices.any((element) =>
+        (element.coordinate.y - 1) == checker.coordinate.y && (element.coordinate.x - 1) == checker.coordinate.x);
   }
 
-  Iterable<Move> computeCatMoves(Node node) {
-    final cat =
-        node.checkers.firstWhere((element) => element.type == PlayerType.CAT);
-    final moves =
-        GameLogic.possibleMoves(cat, node.checkers).map((e) => Move(cat, e));
-    return moves;
+  Result? canMoveWithoutGapLeftSide(List<Checker> checkers, List<Checker> mices) {
+    final leftMice = mices.firstWhereOrNull((element) => element.coordinate.x == 0);
+    final leftMice2 = mices.firstWhereOrNull((element) => element.coordinate.x == 2);
+    if (leftMice != null &&
+        leftMice2 != null &&
+        leftMice.coordinate.y == leftMice2.coordinate.y &&
+        GameLogic
+            .possibleMoves(leftMice, checkers)
+            .isNotEmpty) {
+      return Result(Move(leftMice, GameLogic
+          .possibleMoves(leftMice, checkers)
+          .first), 10);
+    }
+    return null;
   }
 
-  Result computeScore(PlayerType? winner) {
-    if (winner == PlayerType.CAT) {
-      return Result(null, 10);
+  Result? canMoveWithoutGapRightSide(List<Checker> checkers, List<Checker> mices) {
+    final rightMice = mices.firstWhereOrNull((element) => element.coordinate.x == 7);
+    final rightMice2 = mices.firstWhereOrNull((element) => element.coordinate.x == 5);
+    if (rightMice != null &&
+        rightMice2 != null &&
+        rightMice.coordinate.y == rightMice2.coordinate.y &&
+        GameLogic.possibleMoves(rightMice, checkers).isNotEmpty) {
+      return Result(Move(rightMice, GameLogic.possibleMoves(rightMice, checkers).first), 10);
     }
-    if (winner == PlayerType.MICE) {
-      return Result(null, -10);
-    }
-    return Result(null, 0);
-  }
-
-  Result alphaBeta(
-      Node node, int depth, int alpha, int beta, bool maximizingPlayer) {
-    final winner = GameLogic.playerWon(node.checkers);
-    if (depth == 0 || winner != null) {
-      return computeScore(winner);
-    }
-    if (maximizingPlayer) {
-      int value = -1000;
-      Iterable<Move> moves = computeCatMoves(node);
-      Move? bestmove;
-      for (var move in moves) {
-        var result = alphaBeta(
-                node.copy(move), depth - 1, alpha, beta, !maximizingPlayer)
-            .value;
-        if (result > value) {
-          value = result;
-          bestmove = move;
-        }
-        if (value > beta) {
-          return Result(bestmove, value);
-        }
-        alpha = max(value, alpha);
-      }
-      return Result(bestmove, value);
-    } else {
-      int value = 1000;
-      List<Move> moves = computeMiceMoves(node);
-      Move? bestmove;
-      for (var move in moves) {
-        var result = alphaBeta(
-                node.copy(move), depth - 1, alpha, beta, !maximizingPlayer)
-            .value;
-        if (result < value) {
-          value = result;
-          bestmove = move;
-        }
-        if (value < alpha) {
-          return Result(bestmove, value);
-        }
-        beta = min(value, beta);
-      }
-      return Result(bestmove, value);
-    }
+    return null;
   }
 }

@@ -1,12 +1,9 @@
 import 'package:cat_vs_mice/app/pages/board/model/ai_settings.dart';
-import 'package:cat_vs_mice/app/pages/board/model/checker.dart';
-import 'package:cat_vs_mice/app/pages/board/model/coordinate.dart';
 import 'package:cat_vs_mice/app/pages/board/model/difficulty.dart';
 import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/menu/game/model/game_menu_settings.dart';
 import 'package:cat_vs_mice/app/pages/menu/game/model/player.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:collection/collection.dart';
 
 class SettingsNotifier extends StateNotifier<GameMenuSettings> {
   SettingsNotifier(GameMenuSettings state) : super(state);

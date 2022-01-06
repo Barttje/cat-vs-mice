@@ -5,16 +5,17 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:cat_vs_mice/app/pages/board/model/ai_settings.dart';
 import 'package:cat_vs_mice/app/pages/board/model/checker.dart';
 import 'package:cat_vs_mice/app/pages/board/model/coordinate.dart';
+import 'package:cat_vs_mice/app/pages/board/model/difficulty.dart';
 import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/board/service/ai_service.dart';
-import 'package:cat_vs_mice/app/pages/board/service/node.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Counter value should be incremented', () {
-    final aiService = AIService(null);
+    final aiService = AIService(AISettings(PlayerType.CAT, Difficulty.NORMAL));
 
     final checkers = [
       Checker(1, PlayerType.MICE, new Coordinate(0, 6)),
@@ -24,8 +25,7 @@ void main() {
       Checker(5, PlayerType.CAT, new Coordinate(5, 2))
     ];
 
-    final node = Node(checkers);
-    final result = aiService.minimax(node, 8, true);
+    final result = aiService.computeMoveForEasyCat(checkers);
     print(result.value);
     print(result.move?.coordinate.x);
     print(result.move?.coordinate.y);

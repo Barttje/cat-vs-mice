@@ -16,25 +16,31 @@ class DifficultyWidget extends HookWidget {
           child: Container(),
         ),
         Container(
-          width: 120,
-          child: Text(
-            "Difficulty",
-            style: TextStyle(fontSize: 18),
-          ),
-        ),
+            width: 120,
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Difficulty",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            )),
         SizedBox(
           width: 10,
         ),
         ToggleSwitch(
           fontSize: 15,
-          minWidth: 80,
           activeBgColor: [Colors.green],
           activeFgColor: Colors.white,
           inactiveBgColor: Colors.grey[350],
           inactiveFgColor: Colors.white,
-          totalSwitches: 3,
-          initialLabelIndex: 1,
-          labels: ["Easy", "Normal", "Hard"],
+          totalSwitches: 2,
+          initialLabelIndex: 0,
+          labels: [ "Normal", "Hard"],
           onToggle: (index) {
             viewModel.updateDifficulty(index);
           },
@@ -42,7 +48,7 @@ class DifficultyWidget extends HookWidget {
           curve: Curves.fastOutSlowIn,
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Container(),
         ),
       ],

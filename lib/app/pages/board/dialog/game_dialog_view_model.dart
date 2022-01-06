@@ -6,7 +6,6 @@ import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/board/providers/checkers_notifier.dart';
 import 'package:cat_vs_mice/app/pages/board/providers/player_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

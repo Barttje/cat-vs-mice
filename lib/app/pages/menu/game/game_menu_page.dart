@@ -1,8 +1,5 @@
-import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/common/page.dart';
 import 'package:cat_vs_mice/app/pages/menu/game/game_menu_view_model.dart';
-import 'package:cat_vs_mice/app/pages/menu/game/widgets/difficulty_widget.dart';
-import 'package:cat_vs_mice/app/pages/menu/game/widgets/error_widget.dart';
 import 'package:cat_vs_mice/app/pages/menu/game/widgets/game_menu_buttons_widget.dart';
 import 'package:cat_vs_mice/app/pages/menu/game/widgets/settings_widget.dart';
 import 'package:flutter/material.dart';

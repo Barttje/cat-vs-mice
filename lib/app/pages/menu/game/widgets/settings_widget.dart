@@ -41,8 +41,9 @@ class MenuItem extends HookWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 25,
+        Expanded(
+          flex: 1,
+          child: Container(),
         ),
         Container(
             width: 120,
@@ -78,7 +79,7 @@ class MenuItem extends HookWidget {
           curve: Curves.fastOutSlowIn,
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Container(),
         ),
       ],

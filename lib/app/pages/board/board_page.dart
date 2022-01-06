@@ -1,7 +1,14 @@
 import 'package:cat_vs_mice/app/pages/board/board_page_input.dart';
 import 'package:cat_vs_mice/app/pages/board/board_view_model.dart';
+import 'package:cat_vs_mice/app/pages/board/model/ai_settings.dart';
 import 'package:cat_vs_mice/app/pages/board/model/coordinate.dart';
+import 'package:cat_vs_mice/app/pages/board/model/difficulty.dart';
+import 'package:cat_vs_mice/app/pages/board/model/player_type.dart';
 import 'package:cat_vs_mice/app/pages/board/model/square.dart';
+import 'package:cat_vs_mice/app/pages/board/service/calculators/hard_mice_calculator.dart';
+import 'package:cat_vs_mice/app/pages/board/service/calculators/normal_cat_calculator.dart';
+import 'package:cat_vs_mice/app/pages/board/service/calculators/normal_mice_calculator.dart';
+import 'package:cat_vs_mice/app/pages/board/service/move_calculator.dart';
 import 'package:cat_vs_mice/app/pages/board/widgets/options_widget.dart';
 import 'package:cat_vs_mice/app/pages/board/widgets/square_widget.dart';
 import 'package:cat_vs_mice/app/pages/common/page.dart';
@@ -37,7 +44,7 @@ class BoardPage extends HookWidget {
   void init(BuildContext context) {
     useEffect(() {
       Future.delayed(Duration.zero, () {
-        context.read(boardGameViewModel).initialize(input.aiSettings);
+        context.read(boardGameViewModel).initialize(_moveCalculator(input.aiSettings));
       });
     }, []);
   }
@@ -53,4 +60,22 @@ class SquareInitializer {
     }
     return squares;
   }
+}
+
+MoveCalculator? _moveCalculator(AISettings? aiSettings) {
+  if (aiSettings == null) {
+    return null;
+  }
+  print(aiSettings.difficulty);
+  if (aiSettings.player == PlayerType.CAT) {
+    if (aiSettings.difficulty == Difficulty.NORMAL) {
+      return NormalCatCalculator();
+    }
+    return HardMiceCalculator();
+  }
+  if (aiSettings.difficulty == Difficulty.NORMAL) {
+    return NormalMiceCalculator();
+  }
+  print('hoi');
+  return HardMiceCalculator();
 }

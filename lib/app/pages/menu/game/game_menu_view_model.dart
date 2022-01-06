@@ -60,12 +60,9 @@ class GameMenuViewModel {
   void updateDifficulty(int index) {
     switch (index) {
       case 0:
-        _settingsNotifier.updateDifficulty(Difficulty.EASY);
-        break;
-      case 1:
         _settingsNotifier.updateDifficulty(Difficulty.NORMAL);
         break;
-      case 2:
+      case 1:
         _settingsNotifier.updateDifficulty(Difficulty.HARD);
         break;
     }
