@@ -15,6 +15,8 @@ dependencies:
   quiver: ^3.0.1
   get: ^4.1.4
   toggle_switch: ^1.2.0
+  audioplayers: ^0.20.1
+  shared_preferences: ^2.0.11
 
 dev_dependencies:
   flutter_test:
@@ -22,3 +24,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/audio/
+    - assets/images/
+
+
+

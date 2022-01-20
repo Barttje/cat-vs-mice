@@ -9,7 +9,7 @@ import 'package:cat_vs_mice/app/pages/board/service/calculators/hard_mice_calcul
 import 'package:cat_vs_mice/app/pages/board/service/calculators/normal_cat_calculator.dart';
 import 'package:cat_vs_mice/app/pages/board/service/calculators/normal_mice_calculator.dart';
 import 'package:cat_vs_mice/app/pages/board/service/move_calculator.dart';
-import 'package:cat_vs_mice/app/pages/board/widgets/options_widget.dart';
+import 'package:cat_vs_mice/app/pages/board/widgets/current_player_widget.dart';
 import 'package:cat_vs_mice/app/pages/board/widgets/square_widget.dart';
 import 'package:cat_vs_mice/app/pages/common/page.dart';
 import 'package:flutter/material.dart';
@@ -26,17 +26,20 @@ class BoardPage extends HookWidget {
   Widget build(BuildContext context) {
     init(context);
     return DefaultPage(
-      Column(
-        children: [
-          GridView.count(
-            shrinkWrap: true,
-            physics: new NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(4),
-            crossAxisCount: 8,
-            children: squares.map((square) => SquareWidget(square)).toList(),
-          ),
-          OptionsWidget()
-        ],
+      Container(
+        color: Colors.brown[50]!,
+        child: Column(
+          children: [
+            CurrentPlayerWidget(),
+            GridView.count(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(12),
+              physics: new NeverScrollableScrollPhysics(),
+              crossAxisCount: 8,
+              children: squares.map((square) => SquareWidget(square)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

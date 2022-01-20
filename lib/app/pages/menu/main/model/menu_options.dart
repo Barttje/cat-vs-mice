@@ -1,1 +1,0 @@
-enum MenuOption { GAME, ABOUT }

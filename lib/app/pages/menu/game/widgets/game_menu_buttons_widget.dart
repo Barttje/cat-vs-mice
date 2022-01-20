@@ -11,28 +11,17 @@ class GameMenuButtonsWidget extends HookWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
-            style: TextButton.styleFrom(backgroundColor: Colors.grey),
-            onPressed: () {
-              viewModel.back();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Back",
-                style: TextStyle(fontSize: 22),
-              ),
-            )),
-        ElevatedButton(
-            onPressed: () {
-              viewModel.play();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Play",
-                style: TextStyle(fontSize: 22),
-              ),
-            )),
+          onPressed: () {
+            viewModel.play();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Play",
+              style: TextStyle(fontSize: 24, color: Colors.white),
+            ),
+          ),
+        ),
       ],
     );
   }

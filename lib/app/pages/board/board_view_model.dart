@@ -7,7 +7,8 @@ import 'package:cat_vs_mice/app/pages/board/providers/checkers_notifier.dart';
 import 'package:cat_vs_mice/app/pages/board/providers/commands_notifier.dart';
 import 'package:cat_vs_mice/app/pages/board/providers/player_notifier.dart';
 import 'package:cat_vs_mice/app/pages/board/service/move_calculator.dart';
-import 'package:cat_vs_mice/app/routing/routing_service.dart';
+import 'package:cat_vs_mice/app/services/routing_service.dart';
+import 'package:cat_vs_mice/app/services/sound_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final _currentPlayer = StateNotifierProvider<PlayerNotifier, PlayerType>((ref) => PlayerNotifier(PlayerType.MICE));
@@ -21,7 +22,7 @@ final _commands = StateNotifierProvider<CommandNotifier, List<MoveCommand>>((ref
 final canPop = Provider((ref) => ref.watch(_commands).isNotEmpty);
 final boardGameViewModel = Provider<BoardViewModel>(
   (ref) => BoardViewModel(ref.watch(_checkers.notifier), ref.watch(_currentPlayer.notifier),
-      ref.watch(_commands.notifier), ref.watch(routingService)),
+      ref.watch(_commands.notifier), ref.watch(routingService), ref.watch(soundService)),
 );
 
 class BoardViewModel {
@@ -29,9 +30,12 @@ class BoardViewModel {
   CheckerNotifier _checkersStateNotifier;
   PlayerNotifier _playerNotifier;
   CommandNotifier _commandNotifier;
+  SoundService _soundService;
   MoveCalculator? moveCalculator;
+  bool aiWillPlayMove = false;
 
-  BoardViewModel(this._checkersStateNotifier, this._playerNotifier, this._commandNotifier, this._routingService);
+  BoardViewModel(this._checkersStateNotifier, this._playerNotifier, this._commandNotifier, this._routingService,
+      this._soundService);
 
   void initialize(MoveCalculator? moveCalculator) {
     _checkersStateNotifier.initialize();
@@ -40,7 +44,11 @@ class BoardViewModel {
     if (moveCalculator != null) {
       this.moveCalculator = moveCalculator;
       if (moveCalculator.getPlayerType() == PlayerType.CAT) {
-        _executeCommand(moveCalculator.computeMove(_checkersStateNotifier.getCheckers()));
+        aiWillPlayMove = true;
+        Future.delayed(Duration(milliseconds: 750), () {
+          aiWillPlayMove = false;
+          _executeCommand(moveCalculator.computeMove(_checkersStateNotifier.getCheckers()));
+        });
       }
     }
   }
@@ -64,17 +72,38 @@ class BoardViewModel {
   }
 
   void _executeCommand(MoveCommand move) {
+    _soundService.playMoveSound();
     _playerNotifier.updatePlayer();
     _checkersStateNotifier.move(
         _checkersStateNotifier.getCheckers().firstWhere((element) => element.id == move.checkerId), move.to);
     _commandNotifier.push(move);
+    checkWinningConditions();
+    moveAIIfNeeded();
+  }
+
+  void moveAIIfNeeded() {
+    if (moveCalculator != null && moveCalculator!.getPlayerType() == _playerNotifier.getPlayer()) {
+      aiWillPlayMove = true;
+      Future.delayed(
+        Duration(milliseconds: 750),
+        () {
+          _executeCommand(moveCalculator!.computeMove(_checkersStateNotifier.getCheckers()));
+          aiWillPlayMove = false;
+        },
+      );
+    }
+  }
+
+  void checkWinningConditions() {
     final winner = GameLogic.playerWon(_checkersStateNotifier.getCheckers());
     if (winner != null) {
+      if (moveCalculator?.getPlayerType() == winner) {
+        _soundService.playLoseSound();
+      } else {
+        _soundService.playWinSound();
+      }
       initialize(null);
       _routingService.openPlayerDialog(winner);
-    }
-    if (moveCalculator != null && moveCalculator!.getPlayerType() == _playerNotifier.getPlayer()) {
-      _executeCommand(moveCalculator!.computeMove(_checkersStateNotifier.getCheckers()));
     }
   }
 
