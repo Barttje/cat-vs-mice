@@ -21,6 +21,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^1.3.3
 
 flutter:
   uses-material-design: true
@@ -28,5 +29,6 @@ flutter:
     - assets/audio/
     - assets/images/
 
-
-
+flutter_native_splash:
+  color: "#4CAF50"
+  branding: assets/images/splash.png

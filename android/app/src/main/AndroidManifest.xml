@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nl.bartvwezel.cat_vs_mice">
    <application
-        android:label="cat_vs_mice"
+        android:label="Cat vs. Mice"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

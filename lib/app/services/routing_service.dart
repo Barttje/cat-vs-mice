@@ -1,4 +1,3 @@
-import 'package:cat_vs_mice/app/pages/about/about_page.dart';
 import 'package:cat_vs_mice/app/pages/board/board_page.dart';
 import 'package:cat_vs_mice/app/pages/board/board_page_input.dart';
 import 'package:cat_vs_mice/app/pages/board/model/ai_settings.dart';
@@ -14,10 +13,6 @@ final routingService = Provider<RoutingService>((ref) => RoutingService());
 class RoutingService {
   void toBoardGame(AISettings? aiSettings) {
     Get.to(() => BoardPage(BoardPageInput(aiSettings)));
-  }
-
-  void toAbout() {
-    Get.to(() => AboutPage());
   }
 
   void toGameMenu() {

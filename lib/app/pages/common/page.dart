@@ -15,7 +15,7 @@ class DefaultPage extends HookWidget {
     final routing = useProvider(routingService);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cat vs Mice"),
+        title: Text("Cat vs. Mice"),
         actions: [SoundWidget(),
         IconButton(
           icon: Icon(Icons.info),
